@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     public int score { get; private set; }
     public int eaten { get; private set; }
     public bool gameOver { get; private set; }
+
+    /// True while a round is running — lets the menu's PLAY resume a paused
+    /// game (ESC) instead of starting a new one.
+    public bool InProgress { get; private set; }
     public string deathReason = "";
 
     // --- powerup state ---
@@ -186,6 +190,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         eaten = 0;
         gameOver = false;
+        InProgress = true;
         deathReason = "";
         scoreStr = "SCORE  0";
 
@@ -640,12 +645,21 @@ public class GameManager : MonoBehaviour
     {
         if (gameOver) return;
         gameOver = true;
+        InProgress = false;
         deathReason = reason;
         SoundManager.Play(SoundManager.Sfx.GameOver);
     }
 
     void Update()
     {
+        // ESC: pause and return to the main menu (from play or from game over)
+        if (!MainMenu.Open && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("ESC -> main menu");
+            MainMenu.Show();
+            return;
+        }
+
         if (MainMenu.Open) return;         // frozen while the main menu is up
 
         // rolling frame stats + F1 overlay toggle
@@ -897,7 +911,7 @@ public class GameManager : MonoBehaviour
         {
             GUI.Label(new Rect(0, Screen.height / 2 - 90, Screen.width, 70), "GAME OVER", big);
             GUI.Label(new Rect(0, Screen.height / 2 - 10, Screen.width, 44),
-                      deathReason + "   -   press R to restart", mid);
+                      deathReason + "   -   press R to restart   -   press ESC for menu", mid);
         }
 
         if (showDebug)

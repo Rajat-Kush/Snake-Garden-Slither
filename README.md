@@ -53,6 +53,8 @@ The garden itself is alive: grass bends and springs back under the snake, clouds
 | A / ← | Turn left |
 | D / → | Turn right |
 | Mouse | Menu buttons (Play / Options / Credits / Exit) |
+| ESC | Pause → back to menu during play; menu on game over |
+| R | Restart after game over |
 
 ---
 

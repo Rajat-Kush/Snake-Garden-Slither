@@ -64,7 +64,14 @@ public class MainMenu : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Boot()
     {
-        Open = true;
+        Show();
+    }
+
+    /// Re-creates the menu over a running game — used by ESC during play or
+    /// after game over. Rebuilds the full UI; Awake pauses the clock.
+    public static void Show()
+    {
+        if (FindFirstObjectByType<MainMenu>() != null) return;
         var go = new GameObject("MainMenu");
         go.AddComponent<MainMenu>();
         DontDestroyOnLoad(go);
@@ -606,7 +613,9 @@ public class MainMenu : MonoBehaviour
             Open = false;
             Time.timeScale = 1f;
             if (_gm == null) _gm = FindFirstObjectByType<GameManager>();
-            if (_gm != null) _gm.StartGame();
+            // a round already in progress (ESC-pause) resumes where it left
+            // off; otherwise this is the first launch / a restart.
+            if (_gm != null && !_gm.InProgress) _gm.StartGame();
             _phase = 2;
             _fadeTarget = 0f;
         }
