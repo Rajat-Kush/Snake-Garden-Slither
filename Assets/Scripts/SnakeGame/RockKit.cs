@@ -24,11 +24,8 @@ public static class RockKit
     static void Build()
     {
         _mat = new Material(Shader.Find("Standard"));
-#if UNITY_EDITOR
-        var tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Models/boulder_01_diff_1k.jpg");
-#else
-        Texture2D tex = null;
-#endif
+        // Loaded from Resources so it ships inside player builds too.
+        var tex = Resources.Load<Texture2D>("Textures/boulder_01_diff_1k");
         if (tex != null)
         {
             _mat.mainTexture = tex;

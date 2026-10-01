@@ -31,12 +31,9 @@ public class FenceBuilder : MonoBehaviour
     static Material MakeMat()
     {
         var m = new Material(Shader.Find("Standard"));
-#if UNITY_EDITOR
-        var alb = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/brown_planks_03_diff_1k.jpg");
-        var nor = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/brown_planks_03_nor_gl_1k.jpg");
-#else
-        Texture2D alb = null, nor = null;
-#endif
+        // Loaded from Resources so the textures ship inside player builds too.
+        var alb = Resources.Load<Texture2D>("Textures/brown_planks_03_diff_1k");
+        var nor = Resources.Load<Texture2D>("Textures/brown_planks_03_nor_gl_1k");
         if (alb != null) m.mainTexture = alb;
         m.color = new Color(0.98f, 0.85f, 0.66f);   // warm natural-wood brown
         if (nor != null)

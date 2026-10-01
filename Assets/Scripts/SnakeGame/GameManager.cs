@@ -126,12 +126,8 @@ public class GameManager : MonoBehaviour
         go.AddComponent<GrassField>();
     }
 
-#if UNITY_EDITOR
-    static Texture2D LoadTex(string path) =>
-        UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>(path);
-#else
-    static Texture2D LoadTex(string path) => null;
-#endif
+    // Resources.Load works both in the editor and in player builds.
+    static Texture2D LoadTex(string name) => Resources.Load<Texture2D>(name);
 
     void Start()
     {
@@ -148,7 +144,7 @@ public class GameManager : MonoBehaviour
             if (n == "Floor")
             {
                 m.color = new Color(0.44f, 0.66f, 0.38f);
-                var grassTex = LoadTex("Assets/Textures/leafy_grass_diff_1k.jpg");
+                var grassTex = LoadTex("Textures/leafy_grass_diff_1k");
                 if (grassTex != null)
                 {
                     m.mainTexture = grassTex;
